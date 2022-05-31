@@ -3,28 +3,35 @@
 #include "WICTextureLoader.h"
 #include "Utils.h"
 #include <d3dcompiler.h>
+#include "resource.h"
 
 using namespace DirectX;
 
-INT Material::init(ID3D11Device* pD3DDevice, LPCTSTR textureName)
+INT Material::init(ID3D11Device* pD3DDevice, int tex, int desc)
 {
-	INT error = createVertexShader(pD3DDevice);
+	INT error = createVertexShader(pD3DDevice, desc);
 	CheckError(error);
 
-	error = createPixelShader(pD3DDevice);
+	error = createPixelShader(pD3DDevice, desc);
 	CheckError(error);
 
 	error = createMatrixBuffer(pD3DDevice);
 	CheckError(error);
-
-	error = createTextureAndSampler(pD3DDevice, textureName);
+	switch (tex)
+	{
+	case IDC_STONES:
+		error = createTextureAndSampler(pD3DDevice, TEXT("rock.jpg"));
+		break;
+	case IDC_ALUMINIUM:
+		error = createTextureAndSampler(pD3DDevice, TEXT("aluminium.jpg"));
+		break;
+	case IDC_WOOD:
+		error = createTextureAndSampler(pD3DDevice, TEXT("wood.jpg"));
+		break;
+	}
 	CheckError(error);
 
-	//_material.Ambient = { 1.0f, 1.0f, 1.0f, 1.0f };
-	//_material.Diffuse = { 1.0f, 1.0f, 1.0f, 1.0f };
-	//_material.Specular = { 1.0f, 1.0f, 1.0f, 1.0f };
-	//_material.Power = 1024.0f; // as greather the value is as smaller are the highlights
-	//_material.Emissive = { 0.0f, 0.0f, 0.0f, 1.0f };
+	IsInitialized = TRUE;
 
 	return 0;
 }
@@ -49,6 +56,7 @@ void Material::render(ID3D11DeviceContext* pD3DDeviceContext, XMFLOAT4X4* pWorld
 
 void Material::deInit()
 {
+	IsInitialized = FALSE;
 	safeRelease<ID3D11ShaderResourceView>(_pTexture);
 	safeRelease<ID3D11SamplerState>(_pSamplerState);
 	safeRelease<ID3D11Buffer>(_pMatrixBuffer);
@@ -57,7 +65,7 @@ void Material::deInit()
 	safeRelease<ID3D11PixelShader>(_pPixelShader);
 }
 
-INT Material::createVertexShader(ID3D11Device* pD3DDevice)
+INT Material::createVertexShader(ID3D11Device* pD3DDevice, int desc)
 {
 	ID3DBlob* pCompiledShaderCode = nullptr;
 
@@ -76,9 +84,21 @@ INT Material::createVertexShader(ID3D11Device* pD3DDevice)
 	//CheckFailed(hr, 60);
 
 	// 2. load already compiled shader
-	//HRESULT hr = D3DReadFileToBlob(TEXT("ColorVertexShader.cso"), &pCompiledShaderCode);
-	//HRESULT hr = D3DReadFileToBlob(TEXT("TextureVertexShader.cso"), &pCompiledShaderCode);
-	HRESULT hr = D3DReadFileToBlob(TEXT("LightingVertexShader.cso"), &pCompiledShaderCode);
+	HRESULT hr = {};
+	switch (desc)
+	{
+	case IDC_LAMBERTIAN:
+		//hr = D3DReadFileToBlob(TEXT("ColorVertexShader.cso"), &pCompiledShaderCode);
+		hr = D3DReadFileToBlob(TEXT("LightingVertexShader.cso"), &pCompiledShaderCode);
+		break;
+	case IDC_BLINNPHONG:
+		//hr = D3DReadFileToBlob(TEXT("TextureVertexShader.cso"), &pCompiledShaderCode);
+		hr = D3DReadFileToBlob(TEXT("LightingVertexShader.cso"), &pCompiledShaderCode);
+		break;
+	case IDC_PHONG:
+		hr = D3DReadFileToBlob(TEXT("LightingVertexShader.cso"), &pCompiledShaderCode);
+		break;
+	}
 	CheckFailed(hr, 60);
 
 	// create shader object
@@ -93,13 +113,23 @@ INT Material::createVertexShader(ID3D11Device* pD3DDevice)
 	return 0;
 }
 
-INT Material::createPixelShader(ID3D11Device* pD3DDevice)
+INT Material::createPixelShader(ID3D11Device* pD3DDevice, int desc)
 {
 	ID3DBlob* pCompiledShaderCode = nullptr;
 
-	//HRESULT hr = D3DReadFileToBlob(TEXT("ColorPixelShader.cso"), &pCompiledShaderCode);
-	//HRESULT hr = D3DReadFileToBlob(TEXT("TexturePixelShader.cso"), &pCompiledShaderCode);
-	HRESULT hr = D3DReadFileToBlob(TEXT("LightingPixelShader.cso"), &pCompiledShaderCode);
+	HRESULT hr = {};
+	switch (desc)
+	{
+	case IDC_LAMBERTIAN:
+		hr = D3DReadFileToBlob(TEXT("LambertianPixelShader.cso"), &pCompiledShaderCode);
+		break;
+	case IDC_BLINNPHONG:
+		hr = D3DReadFileToBlob(TEXT("BlinnPhongPixelShader.cso"), &pCompiledShaderCode);
+		break;
+	case IDC_PHONG:
+		hr = D3DReadFileToBlob(TEXT("PhongPixelShader.cso"), &pCompiledShaderCode);
+		break;
+	}
 	CheckFailed(hr, 64);
 
 	hr = pD3DDevice->CreatePixelShader(pCompiledShaderCode->GetBufferPointer(), pCompiledShaderCode->GetBufferSize(), nullptr, &_pPixelShader);
@@ -113,7 +143,7 @@ INT Material::createPixelShader(ID3D11Device* pD3DDevice)
 INT Material::createInputLayout(ID3D11Device* pD3DDevice, ID3DBlob* pVertexShaderData)
 {
 	// https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-semantics
-	
+
 	//D3D11_INPUT_ELEMENT_DESC elements[] = {
 	//	// position
 	//	{
@@ -204,6 +234,6 @@ INT Material::createTextureAndSampler(ID3D11Device* pD3DDevice, LPCTSTR textureN
 
 	hr = pD3DDevice->CreateSamplerState(&desc, &_pSamplerState);
 	CheckFailed(hr, 65);
-	
+
 	return 0;
 }

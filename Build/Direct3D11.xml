@@ -1,0 +1,187 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        "Direct3D11"
+    </assembly>
+    <members>
+        <member name="M:AppManager.DisplayResourceNAMessageBox(System.Char!System.Runtime.CompilerServices.IsConst*,System.Char!System.Runtime.CompilerServices.IsConst*)">
+            <summary>
+Generic method for displaying informational messageboxes.
+</summary>
+            <param name="text">Text to be displayed.</param>
+            <param name="header">Header at the top of the Box.</param>
+            <returns>Returns the ID of the messagebox.</returns>
+        </member>
+        <member name="M:AppManager.DeInitMeshes">
+            <summary>
+Deinitializes the mesh for each object.
+</summary>
+        </member>
+        <member name="F:AppManager.advSettingsDlg">
+            <summary>
+Used for setting specific data on Object.
+</summary>
+        </member>
+        <member name="F:AppManager.sceneViewDlg">
+            <summary>
+Manages the sceneview menu.
+<see cref="!:AppManager::RunSceneView" /></summary>
+        </member>
+        <member name="F:AppManager.startDlg">
+            <summary>
+Manages Startup menu.
+</summary>
+        </member>
+        <member name="F:AppManager.objEditDlg">
+            <summary>
+Used for editing objects individually.
+</summary>
+        </member>
+        <member name="M:AppManager.DeInit">
+            <summary>
+Deinitializes graphics rendering components, when quitting the application.
+</summary>
+        </member>
+        <member name="M:AppManager.UpdateAdvSettingsDlg">
+            <summary>
+Updates the Advanced Settings Dialog at runtima
+</summary>
+            <returns>Returns FALSE, if back button has been pressed.</returns>
+        </member>
+        <member name="M:AppManager.UpdateSceneView">
+            <summary>
+Update scene view at runtime.
+</summary>
+            <returns>
+Returns true, except, when the "Back" button has been clicked.
+</returns>
+        </member>
+        <member name="M:AppManager.UpdateObjEditDlg">
+            <summary>
+Updates the object editor dialog at runtime.
+</summary>
+            <returns>
+Returns true, except, when the "Back" button has been clicked.
+</returns>
+        </member>
+        <member name="M:AppManager.UpdateStartDlg">
+            <summary>
+Updates the start Dialog at runtime.
+</summary>
+            <returns>
+Returns true, if nothing has been selected.
+Returns false, if a button has been clicked (except for "Help").
+</returns>
+        </member>
+        <member name="M:AppManager.UpdateD3D">
+            <summary>
+Update graphics rendering components for currently initialized objects.
+</summary>
+        </member>
+        <member name="M:AppManager.InitSceneView">
+            <summary>
+Initializes the mesh for each object in our scene.
+</summary>
+        </member>
+        <member name="M:AppManager.InitD3D(HINSTANCE__*)">
+            <summary>
+Init graphics rendering components for all Objects.
+</summary>
+            <param name="hInstance" />
+        </member>
+        <member name="M:AppManager.Init">
+            <summary>
+Opens the start dialog.
+</summary>
+        </member>
+        <member name="T:AppManager">
+            <summary>
+Manages the Application and its main Components.
+Main Tasks: Managing dialogs and main window, Managing Dialog Control Commands
+</summary>
+        </member>
+        <member name="M:Shape.initMeshData">
+            <summary>
+Configure custom data for vertex and indexbuffer 
+</summary>
+        </member>
+        <member name="M:Shape.initLightData">
+            <summary>
+Configure Light::LightData parameters
+</summary>
+        </member>
+        <member name="M:Shape.InitMesh(ID3D11Device*,System.Single,System.Single,System.Single)">
+            <summary>
+Initialize the mesh component
+</summary>
+            <param name="d3dDevice" />
+            <param name="xOffset" />
+            <param name="yOffset" />
+            <param name="zOffset" />
+        </member>
+        <member name="M:Shape.SetPositionOffset(System.Single,System.Single,System.Single)">
+            <summary>
+Set world position to (x,y,z)
+</summary>
+            <param name="x" />
+            <param name="y" />
+            <param name="z" />
+        </member>
+        <member name="M:Shape.SetDefaultPos">
+            <summary>
+Set world position to: (0,0,0)
+</summary>
+        </member>
+        <member name="F:Shape.Shader">
+            <summary>
+Currently active shader
+</summary>
+        </member>
+        <member name="F:Shape.Texture">
+            <summary>
+Currently active texture
+</summary>
+        </member>
+        <member name="F:DlgExchData.View">
+            <summary>
+Currently active Menu.
+</summary>
+        </member>
+        <member name="F:DlgExchData.Val">
+            <summary>
+Currently sent IDC_Command, retrieved from a dialog procedure.
+</summary>
+        </member>
+        <member name="F:DlgExchData.TargetVal">
+            <summary>
+Number, that is contained in the most recently edited edit-control.
+</summary>
+        </member>
+        <member name="T:DlgExchData">
+            <summary>
+Instance, that can easily be accessed from within a dialog procedure. Used for setting and retrieving data, mainly commands.
+</summary>
+        </member>
+        <member name="M:AdvSettingsDlgHndl.FLOAT_to_wstring(System.Single)">
+            <summary>
+Takes in a FLOAT value, converts it, and then returns it as a wstring.
+</summary>
+            <param name="fl" />
+            <returns />
+        </member>
+        <member name="M:AdvSettingsDlgHndl.DrawValues(System.Int32)">
+            <summary>
+Gets called when this dialog is initialized. Gets corresponding DlgItem for each member of the current <c>Light::LightData</c>.
+</summary>
+        </member>
+        <member name="M:AdvSettingsDlgHndl.CheckRange(System.Int32,System.Int32,System.Int32,HWND__*)">
+            <summary>
+Checks if the given input value is within a specific range. If not, it will set the value to the closest value in range. Finally it will post this value to the corresponding edit control.
+</summary>
+            <param name="val">-&gt; The Input Value</param>
+            <param name="min" />
+            <param name="max" />
+            <param name="hWnd">-&gt;HWND of edit control</param>
+        </member>
+    </members>
+</doc>

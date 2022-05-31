@@ -1,0 +1,226 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "winres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (United States) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""winres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_DIALOG1 DIALOGEX 100, 100, 183, 149
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Start Menu"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "Quit",IDC_QUITAPP,66,75,50,14
+    PUSHBUTTON      "Sceneview",IDC_SCENEVIEW,66,60,50,14
+    PUSHBUTTON      "Object Editor",IDC_OBJECTEDITOR,66,45,50,14
+    PUSHBUTTON      "Help",IDC_HELPSTART,66,90,50,14
+END
+
+IDD_DIALOG2 DIALOGEX 0, 0, 167, 120
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+FONT 8, "Microsoft Sans Serif", 400, 0, 0x0
+BEGIN
+    PUSHBUTTON      "Plane",IDC_LOADPLANE,6,17,50,14
+    PUSHBUTTON      "Cube",IDC_LOADCUBE,57,17,50,14
+    PUSHBUTTON      "Pyramid",IDC_LOADPYRAMID,109,17,50,14
+    PUSHBUTTON      "Rough",IDC_LAMBERTIAN,7,39,50,14
+    PUSHBUTTON      "Matt",IDC_BLINNPHONG,58,39,50,14
+    PUSHBUTTON      "Glossy",IDC_PHONG,110,39,50,14
+    LTEXT           "Shapes:",IDC_STATIC,6,8,29,8
+    LTEXT           "Shader:",IDC_STATIC,7,31,27,8
+    LTEXT           "Texture:",IDC_STATIC,7,54,30,8
+    PUSHBUTTON      "Help",IDC_HELPOBJEDIT,34,99,50,14
+    PUSHBUTTON      "Stones",IDC_STONES,8,61,50,14
+    PUSHBUTTON      "Wood",IDC_WOOD,59,61,50,14
+    PUSHBUTTON      "Aluminium",IDC_ALUMINIUM,111,61,50,14
+    PUSHBUTTON      "Advanced Settings",IDC_ADVSETTINGS,7,79,152,14
+    PUSHBUTTON      "Back",IDC_BACK,85,99,50,14
+END
+
+IDD_DIALOG3 DIALOGEX 0, 0, 67, 45
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "Back",IDC_BACK,7,22,50,14
+    PUSHBUTTON      "Help",IDC_HELPSCENEVIEW,7,7,50,14
+END
+
+IDD_DIALOG4 DIALOGEX 0, 0, 123, 197
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "APPLY",IDC_APPLY,31,165,50,14
+    LTEXT           "Position:",IDC_STATIC,7,42,34,8
+    LTEXT           "Intensity:",IDC_STATIC,7,10,31,8
+    LTEXT           "Surrounding Intensity:",IDC_STATIC,7,22,41,18
+    LTEXT           "Ambient",IDC_STATIC,7,92,28,8
+    LTEXT           "Diffuse:",IDC_STATIC,7,114,26,8
+    LTEXT           "Specular:",IDC_STATIC,7,135,32,8
+    LTEXT           "SurfaceTex:",IDC_STATIC,7,81,41,8
+    EDITTEXT        IDC_EDITLIGHTPOSX,15,50,22,12,ES_AUTOHSCROLL | NOT WS_VISIBLE
+    EDITTEXT        IDC_EDITLIGHTPOSY,49,50,22,12,ES_AUTOHSCROLL | NOT WS_VISIBLE
+    EDITTEXT        IDC_EDITLIGHTPOSZ,81,50,22,12,ES_AUTOHSCROLL | NOT WS_VISIBLE
+    EDITTEXT        IDC_EDITAMBIENTX,15,100,22,12,ES_AUTOHSCROLL | NOT WS_VISIBLE
+    EDITTEXT        IDC_EDITAMBIENTY,47,100,23,12,ES_AUTOHSCROLL | NOT WS_VISIBLE
+    EDITTEXT        IDC_EDITAMBIENTZ,82,100,23,12,ES_AUTOHSCROLL | NOT WS_VISIBLE
+    EDITTEXT        IDC_EDITDIFFUSEX,15,122,23,12,ES_AUTOHSCROLL | NOT WS_VISIBLE
+    EDITTEXT        IDC_EDITDIFFUSEY,48,122,23,12,ES_AUTOHSCROLL | NOT WS_VISIBLE
+    EDITTEXT        IDC_EDITDIFFUSEZ,81,122,23,12,ES_AUTOHSCROLL | NOT WS_VISIBLE
+    EDITTEXT        IDC_EDITSPECULARX,15,144,23,12,ES_AUTOHSCROLL | NOT WS_VISIBLE
+    EDITTEXT        IDC_EDITSPECULARY,48,144,23,12,ES_AUTOHSCROLL | NOT WS_VISIBLE
+    EDITTEXT        IDC_EDITSPECULARZ,82,144,22,12,ES_AUTOHSCROLL | NOT WS_VISIBLE
+    EDITTEXT        IDC_EDITSURFACETEX,51,80,23,12,ES_AUTOHSCROLL | NOT WS_VISIBLE
+    EDITTEXT        IDC_EDITSURRLIGHTINTENSITY,49,29,23,12,ES_AUTOHSCROLL | NOT WS_VISIBLE
+    EDITTEXT        IDC_EDITLIGHTINTENSITY,49,10,23,12,ES_AUTOHSCROLL
+    LTEXT           "MATERIAL",IDC_STATIC,31,69,35,8
+    LTEXT           "LIGHT",IDC_STATIC,39,1,20,8
+    PUSHBUTTON      "FINISH",IDC_FINISH,30,182,50,14
+    LTEXT           "%",IDC_STATIC,75,12,8,8
+    LTEXT           "%",IDC_STATIC,75,31,8,8
+    LTEXT           "Z:",IDC_STATIC,73,52,8,8
+    LTEXT           "Y:",IDC_STATIC,41,52,8,8
+    LTEXT           "X:",IDC_STATIC,7,52,8,8
+    LTEXT           "/200",IDC_STATIC,75,82,16,8
+    LTEXT           "%",IDC_STATIC,37,102,8,8
+    LTEXT           "%",IDC_STATIC,38,124,8,8
+    LTEXT           "%",IDC_STATIC,38,146,8,8
+    LTEXT           "%",IDC_STATIC,70,102,8,8
+    LTEXT           "%",IDC_STATIC,71,124,8,8
+    LTEXT           "%",IDC_STATIC,71,146,8,8
+    LTEXT           "%",IDC_STATIC,105,102,8,8
+    LTEXT           "%",IDC_STATIC,106,124,8,8
+    LTEXT           "%",IDC_STATIC,106,146,8,8
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_DIALOG1, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        TOPMARGIN, 7
+    END
+
+    IDD_DIALOG2, DIALOG
+    BEGIN
+    END
+
+    IDD_DIALOG4, DIALOG
+    BEGIN
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+
+IDD_DIALOG1 AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DIALOG4 AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DIALOG2 AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Image
+//
+
+IDR_IMAGE1              Image                   "wood.jpg"
+
+IDR_IMAGE2              Image                   "aluminium.jpg"
+
+IDR_IMAGE3              Image                   "rock.jpg"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Shader
+//
+
+IDR_SHADER1             Shader                  "BlinnPhongPixelShader.hlsl"
+
+IDR_SHADER2             Shader                  "LambertianPixelShader.hlsl"
+
+IDR_SHADER3             Shader                  "PhongPixelShader.hlsl"
+
+IDR_SHADER4             Shader                  "LightingVertexShader.hlsl"
+
+#endif    // English (United States) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

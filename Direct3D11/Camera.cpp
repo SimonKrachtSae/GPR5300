@@ -7,7 +7,7 @@ INT Camera::init(UINT screenWidth, UINT screenHeight)
 {
     // view matrix
     XMMATRIX viewMatrix = XMMatrixLookToLH(
-        XMVectorSet(0.0f, 0.0f, -1.0f, 0.0f), // camera position
+        XMVectorSet(0.0f, 0.0f, -6.0f, 0.0f), // camera position
         XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), // camera forward vector
         XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f) // camera up vector
     );

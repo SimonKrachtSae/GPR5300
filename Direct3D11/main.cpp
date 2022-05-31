@@ -1,86 +1,53 @@
 #include <Windows.h>
-#include <random>
-#include "Window.h"
-#include "D3D.h"
-#include "Utils.h"
-#include "Mesh.h"
-#include "Camera.h"
-#include "Time.h"
-#include "Material.h"
-#include "Light.h"
+#include "DlgBoxHndl.h"
+#include "resource.h"
+#include "DlgExchData.h"
+#include "AppManager.h"
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine, int nCmdShow)
 {
-	INT error = 0;
-	UINT width = 1024;
-	UINT height = 768;
-	BOOL isFullscreen = FALSE;
 
-	// 1. create window
-	Window window = {};
-	error = window.init(hInstance, width, height);
-	CheckError(error);
+	AppManager appManager = {};
 
-	// 2. connection to Direct3D11
-	D3D d3d = {};
-	error = d3d.init(window.getWindowHandle(), width, height, isFullscreen);
-	CheckError(error);
 
-	// 3. create mesh/object
-	Mesh mesh = {};
-	error = mesh.init(d3d.getDevice());
-	CheckError(error);
-
-	// 4. create camera
-	Camera camera = {};
-	error = camera.init(width, height);
-	CheckError(error);
-
-	// 5. set up time
-	Time time = {};
-	error = time.init();
-	CheckError(error);
-
-	// 6. create material
-	Material material = {};
-	error = material.init(d3d.getDevice(), TEXT("wall.jpg"));
-	CheckError(error);
-
-	// 7. create light
-	Light::LightData lightData = {};
-	lightData.lightDirection = { -1.0f, -1.0f, 1.0f };
-	lightData.lightDiffuseColor = { 0.8f, 0.8f, 0.8f, 1.0f };
-	lightData.lightIntensity = 1.0f;
-	Light light = {};
-	error = light.init(d3d.getDevice(), lightData);
-	CheckError(error);
-
-	// 8. run application
-	while (window.run())
+	while (appManager.IsRunning)
 	{
-		// 8.1 update objects
-		time.update();
-		camera.update(time.getDeltaTime());
-		mesh.update(time.getDeltaTime());
+		appManager.Init();
 
-		// 8.2 draw objects
-		d3d.beginScene(0.0f, 0.0f, 0.0f);
+		while (appManager.UpdateStartDlg())
+		{
+			Sleep(5);
+		}
 
-		material.render(d3d.getDeviceContext(), mesh.getWorldMatrix(), camera.getViewMatrix(), camera.getProjectionMatrix());
-		light.render(d3d.getDeviceContext());
-		mesh.render(d3d.getDeviceContext());
+		if (!appManager.D3d.IsInitialized)
+		{
+			appManager.InitD3D(hInstance);
+		}
 
-		d3d.endScene();
+		switch (DlgExchData::shared_instance().View)
+		{
+		case IDC_OBJECTEDITOR:
+			while (appManager.Window.run() && appManager.UpdateObjEditDlg())
+			{
+				appManager.UpdateD3D();
+			}
+			break;
+
+		case IDC_SCENEVIEW:
+			appManager.InitSceneView();
+
+			while (appManager.Window.run() && appManager.UpdateSceneView())
+			{
+				appManager.UpdateD3D();
+			}
+			break;
+
+		default:
+			break;
+		}
 	}
-
-	// 9. tidy up
-	light.deInit();
-	material.deInit();
-	time.deInit();
-	camera.deInit();
-	mesh.deInit();
-	d3d.deInit();
-	window.deInit();
+	appManager.DeInit();
+	appManager.Window.deInit();
 
 	return 0;
 }

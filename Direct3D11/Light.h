@@ -10,15 +10,16 @@ public:
 
 	struct LightData
 	{
-		//XMFLOAT3 lightDirection;
-		//FLOAT padding; // because of 16 byte alignment
-		//XMFLOAT4 lightDiffuseColor;
-		//FLOAT lightIntensity;
-		//XMFLOAT3 padding2; // because of 16 byte alignment
-
-		XMFLOAT3 lightDirection;
+		XMFLOAT3 lightPosition;
 		FLOAT lightIntensity;
-		XMFLOAT4 lightDiffuseColor;
+
+		XMFLOAT4 matAmbient;
+		XMFLOAT4 matDiffuse;
+		XMFLOAT4 matSpecular;
+
+		FLOAT surfaceTex;
+		FLOAT surrLightIntensity;
+		XMFLOAT2 padding;
 	};
 
 	INT init(ID3D11Device* pD3DDevice, LightData &light, INT id = 0);

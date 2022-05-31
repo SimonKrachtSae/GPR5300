@@ -10,6 +10,7 @@ public:
 
 	HWND getWindowHandle() { return _hWnd; }
 
+	BOOL IsInitialized = FALSE;
 private:
 	HWND _hWnd = nullptr;
 };

@@ -81,8 +81,8 @@ INT D3D::init(HWND hWnd, UINT width, UINT height, BOOL isFullscreen)
     D3D11_VIEWPORT viewPort = {}; // describe area projected onto screen/window
     viewPort.TopLeftX = 0.0f;
     viewPort.TopLeftY = 0.0f;
-    viewPort.Width = width;
-    viewPort.Height = height;
+    viewPort.Width = (FLOAT)width;
+    viewPort.Height = (FLOAT)height;
     viewPort.MinDepth = 0.0f;
     viewPort.MaxDepth = 1.0f;
 
@@ -90,6 +90,8 @@ INT D3D::init(HWND hWnd, UINT width, UINT height, BOOL isFullscreen)
     _pD3DDeviceContext->OMSetRenderTargets(1, &_pRenderTargetView, _pDepthStencilView);
     _pD3DDeviceContext->RSSetViewports(1, &viewPort);
     _pD3DDeviceContext->RSSetState(_pRasterizerState);
+
+    IsInitialized = TRUE;
 
     return 0;
 }
@@ -118,4 +120,6 @@ void D3D::deInit()
     safeRelease<ID3D11Device>(_pD3DDevice);
     safeRelease<ID3D11DeviceContext>(_pD3DDeviceContext);
     safeRelease<IDXGISwapChain>(_pDXGISwapChain);
+
+    IsInitialized = FALSE;
 }

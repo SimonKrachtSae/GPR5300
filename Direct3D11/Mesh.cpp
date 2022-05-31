@@ -2,17 +2,19 @@
 #include "Utils.h"
 #include "Vertex.h"
 #include <xutility>
+#include "resource.h"
 
-INT Mesh::init(ID3D11Device* pD3DDevice)
+INT Mesh::init(ID3D11Device* pD3DDevice, int indexCount, int vertexCount, USHORT** indices, Vertex** vertices)
 {
-	INT error = initVertexBuffer(pD3DDevice);
+	INT error = initVertexBuffer(pD3DDevice, vertexCount, vertices);
 	CheckError(error);
 
-	error = initIndexBuffer(pD3DDevice);
+	error = initIndexBuffer(pD3DDevice, indexCount, indices);
 	CheckError(error);
 
 	// initialize world transformation matrix
 	XMStoreFloat4x4(&_worldMatrix, XMMatrixIdentity());
+	IsInitialized = TRUE;
 
 	return 0;
 }
@@ -22,20 +24,38 @@ void Mesh::update(FLOAT dt)
 	static FLOAT posX = 0.0f;
 	static FLOAT posY = 0.0f;
 	static FLOAT posZ = 0.0f;
-	static FLOAT rot = 0.0f;
-	rot += XM_PI / 3.0f * dt;
+	static FLOAT rotY = 0.0f;
+	static FLOAT rotX = 0.0f;
 
 	FLOAT move = 5.0f * dt;
 
-	if ((GetAsyncKeyState(VK_LEFT) & 0x8000) || (GetAsyncKeyState('A') & 0x8000)) posX -= move;
-	if ((GetAsyncKeyState(VK_RIGHT) & 0x8000) || (GetAsyncKeyState('D') & 0x8000)) posX += move;
-	if ((GetAsyncKeyState(VK_UP) & 0x8000) || (GetAsyncKeyState('W') & 0x8000)) posY += move;
-	if ((GetAsyncKeyState(VK_DOWN) & 0x8000) || (GetAsyncKeyState('S') & 0x8000)) posY -= move;
-	if ((GetAsyncKeyState(VK_SUBTRACT) & 0x8000) || (GetAsyncKeyState('Q') & 0x8000)) posZ -= move;
-	if ((GetAsyncKeyState(VK_ADD) & 0x8000) || (GetAsyncKeyState('E') & 0x8000)) posZ += move;
+	if ((GetAsyncKeyState(VK_SHIFT) & 0x8000))
+	{
+		if ((GetAsyncKeyState(VK_LEFT) & 0x8000) || (GetAsyncKeyState('A') & 0x8000))
+			rotY -= XM_PI / 3.0f * dt;
+		if ((GetAsyncKeyState(VK_RIGHT) & 0x8000) || (GetAsyncKeyState('D') & 0x8000))
+			rotY += XM_PI / 3.0f * dt;
+		if ((GetAsyncKeyState(VK_UP) & 0x8000) || (GetAsyncKeyState('W') & 0x8000))
+			rotX += XM_PI / 3.0f * dt;
+		if ((GetAsyncKeyState(VK_DOWN) & 0x8000) || (GetAsyncKeyState('S') & 0x8000))
+			rotX -= XM_PI / 3.0f * dt;
+	}
+	else
+	{
+		if ((GetAsyncKeyState(VK_UP) & 0x8000) || (GetAsyncKeyState('W') & 0x8000) && posZLimit <= 2.0f)
+		{
+			posZ += move;
+			posZLimit += move;
+		}
+		if ((GetAsyncKeyState(VK_DOWN) & 0x8000) || (GetAsyncKeyState('S') & 0x8000) && posZLimit >= -2.0f)
+		{
+			posZ -= move;
+			posZLimit -= move;
+		}
+	}
 
 	XMMATRIX translation = XMMatrixTranslation(posX, posY, posZ);
-	XMMATRIX rotation = XMMatrixRotationRollPitchYaw(0.0f, rot, 0.0f);
+	XMMATRIX rotation = XMMatrixRotationRollPitchYaw(rotX, rotY, 0.0f);
 	XMMATRIX localScale = XMMatrixScaling(1.0f, 1.0f, 1.0f);
 
 	XMStoreFloat4x4(&_worldMatrix, localScale * rotation * translation);
@@ -55,27 +75,21 @@ void Mesh::render(ID3D11DeviceContext* pD3DDeviceContext)
 
 void Mesh::deInit()
 {
+	IsInitialized = false;
 	safeRelease<ID3D11Buffer>(_pVertexBuffer);
 	safeRelease<ID3D11Buffer>(_pIndexBuffer);
 }
 
-INT Mesh::initVertexBuffer(ID3D11Device* pD3DDevice)
+void Mesh::ResetWorldTransform()
 {
-	Vertex vertices[] = {
-		//// quad with color
-		//Vertex(-0.5f, 0.5f, 0.0f, 255u, 0u, 0u),
-		//Vertex(0.5f, 0.5f, 0.0f, 0u, 255u, 0u),
-		//Vertex(0.5f, -0.5f, 0.0f, 255u, 0u, 255u),
-		//Vertex(-0.5f, -0.5f, 0.0f, 0u, 0u, 255u)
+	_worldMatrix = XMFLOAT4X4();
+	XMStoreFloat4x4(&_worldMatrix, XMMatrixIdentity());
+}
 
-		// quad with uv & normal
-		Vertex(-0.5f, 0.5f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f),
-		Vertex(0.5f, 0.5f, 0.0f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f),
-		Vertex(0.5f, -0.5f, 0.0f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f),
-		Vertex(-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f)	
-	};
+INT Mesh::initVertexBuffer(ID3D11Device* pD3DDevice, int vertexCount, Vertex** vertices)
+{
+	_vertexCount = vertexCount;
 
-	_vertexCount = std::size(vertices);
 	_vertexStride = sizeof(Vertex);
 
 	D3D11_BUFFER_DESC desc = {};
@@ -84,7 +98,7 @@ INT Mesh::initVertexBuffer(ID3D11Device* pD3DDevice)
 	desc.Usage = D3D11_USAGE_IMMUTABLE; // who has which access
 
 	D3D11_SUBRESOURCE_DATA initialData = {};
-	initialData.pSysMem = vertices;
+	initialData.pSysMem = vertices[0];
 
 	HRESULT hr = pD3DDevice->CreateBuffer(&desc, &initialData, &_pVertexBuffer);
 	CheckFailed(hr, 30);
@@ -92,18 +106,9 @@ INT Mesh::initVertexBuffer(ID3D11Device* pD3DDevice)
 	return 0;
 }
 
-INT Mesh::initIndexBuffer(ID3D11Device* pD3DDevice)
+INT Mesh::initIndexBuffer(ID3D11Device* pD3DDevice, int indexCount, USHORT** indices)
 {
-	USHORT indices[] = {
-		// quad with 2 triangles
-		// primitive 1
-		0, 1, 2,
-
-		// primitive 2
-		0, 2, 3
-	};
-
-	_indexCount = std::size(indices);
+	_indexCount = indexCount;
 
 	D3D11_BUFFER_DESC desc = {};
 	desc.ByteWidth = _indexCount * sizeof(USHORT);
@@ -111,7 +116,7 @@ INT Mesh::initIndexBuffer(ID3D11Device* pD3DDevice)
 	desc.Usage = D3D11_USAGE_IMMUTABLE;
 
 	D3D11_SUBRESOURCE_DATA initialData = {};
-	initialData.pSysMem = indices;
+	initialData.pSysMem = indices[0];
 
 	HRESULT hr = pD3DDevice->CreateBuffer(&desc, &initialData, &_pIndexBuffer);
 	CheckFailed(hr, 32);

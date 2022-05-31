@@ -27,6 +27,7 @@ INT Window::init(HINSTANCE hInstance, UINT width, UINT height)
 	ShowWindow(_hWnd, SW_SHOW);
 	SetFocus(_hWnd); 
 	
+	IsInitialized = TRUE;
 	return 0;
 }
 
@@ -45,6 +46,7 @@ BOOL Window::run()
 
 void Window::deInit()
 {
+	IsInitialized = FALSE;
 }
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -54,10 +56,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	case WM_CLOSE:
 	case WM_DESTROY:
 		PostQuitMessage(0);
-		break;
-
-	case WM_KEYDOWN:
-		if (wParam == VK_ESCAPE) DestroyWindow(hWnd);
 		break;
 
 	default:

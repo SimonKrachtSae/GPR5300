@@ -14,6 +14,7 @@ public:
 	ID3D11Device* getDevice() { return _pD3DDevice; }
 	ID3D11DeviceContext* getDeviceContext() { return _pD3DDeviceContext; }
 
+	BOOL IsInitialized = FALSE;
 private:
 	ID3D11Device* _pD3DDevice = nullptr; // creating objects, e.g. vertex buffer
 	ID3D11DeviceContext* _pD3DDeviceContext = nullptr; // handling render pipeline, e.g. set resources or draw call
